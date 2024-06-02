@@ -37,17 +37,18 @@ function reset() {
 }
 
 function updateBlockCount() {
-    try {
-        var input_int = parseInt(blockCountInput.value);
-    } catch (error) {
-        console.error("Input " + blockCountInput.value + " is not a number");
-    }
-
-    if (input_int < 10 || input_int > 300) {
-        console.error(input_int + " out of scope");
+    if (isNaN(blockCountInput.value)) {
+        console.error("Invalid type of input");
     } else {
-        itemCount = input_int;
-        reset();
+        var input_int = parseInt(blockCountInput.value);
+        console.log(input_int)
+    
+        if (input_int < 10 || input_int > 300) {
+            console.error(input_int + " out of scope");
+        } else {
+            itemCount = input_int;
+            reset();
+        }
     }
 }
 
@@ -167,3 +168,8 @@ swapButton.addEventListener("click", function() {
 });
 
 updateButton.addEventListener("click", updateBlockCount);
+blockCountInput.addEventListener("keydown", function(event) {
+    if (event.key == "Enter") {
+        updateBlockCount();
+    }
+});
