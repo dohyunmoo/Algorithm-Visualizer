@@ -7,7 +7,10 @@ const selectionButton = document.getElementById("selection");
 const insertionButton = document.getElementById("insertion");
 const quickButton = document.getElementById("quick");
 
-const itemCount = 100;
+const blockCountInput = document.getElementById("block-count-input");
+const updateButton = document.getElementById("update-block-count");
+
+var itemCount = 100;
 
 // Function to create a single block
 function createBlock(num) {
@@ -15,9 +18,9 @@ function createBlock(num) {
     block.classList.add("block");
     block.id = num;
     block.style.backgroundColor = "rgb(" + Math.trunc((255 / itemCount) * num) + ", " + Math.trunc((255 / itemCount) * num) + ", " + Math.trunc((255 / itemCount) * num) + ")";
-    block.style.width = "1%";
+    block.style.width =  (100 / itemCount) + "%";
     block.setAttribute("locationData", num);
-    block.textContent = block.getAttribute("locationData");
+    // block.textContent = block.getAttribute("locationData");
     return block;
 }
 
@@ -33,6 +36,21 @@ function reset() {
     }
 }
 
+function updateBlockCount() {
+    try {
+        var input_int = parseInt(blockCountInput.value);
+    } catch (error) {
+        console.error("Input " + blockCountInput.value + " is not a number");
+    }
+
+    if (input_int < 10 || input_int > 300) {
+        console.error(input_int + " out of scope");
+    } else {
+        itemCount = input_int;
+        reset();
+    }
+}
+
 // Function to shuffle the order of blocks
 function shuffleBlocks() {
     const blocks = Array.from(container.querySelectorAll(".block"));
@@ -43,23 +61,23 @@ function shuffleBlocks() {
     container.innerHTML = ''; // Clear existing blocks
     blocks.forEach(block => container.appendChild(block));
 
-    var divs = container.querySelectorAll("div");
-    for (var i = 0; i < divs.length; i++) {
+    let divs = container.querySelectorAll("div");
+    for (let i = 0; i < divs.length; i++) {
         divs[i].setAttribute("locationData", i);
-        divs[i].textContent = divs[i].getAttribute("locationData");
+        // divs[i].textContent = divs[i].getAttribute("locationData");
     }
 }
 
 // swapping ID num1 and ID num2
 function swap(num1, num2,) {
-    var child1 = document.getElementById(num1);
-    var child2 = document.getElementById(num2);
+    let child1 = document.getElementById(num1);
+    let child2 = document.getElementById(num2);
 
-    var placeholder1 = document.createElement("div");
-    var placeholder2 = document.createElement("div");
+    let placeholder1 = document.createElement("div");
+    let placeholder2 = document.createElement("div");
     
-    var currLocation1 = child1.getAttribute("locationData");
-    var currLocation2 = child2.getAttribute("locationData"); 
+    let currLocation1 = child1.getAttribute("locationData");
+    let currLocation2 = child2.getAttribute("locationData"); 
 
     // temp1
     child1.classList.add("animate-up");
@@ -97,8 +115,8 @@ function swap(num1, num2,) {
 
     child2.setAttribute("locationData", currLocation1);
     child1.setAttribute("locationData", currLocation2);
-    child2.textContent = child2.getAttribute("locationData");
-    child1.textContent = child1.getAttribute("locationData");
+    // child2.textContent = child2.getAttribute("locationData");
+    // child1.textContent = child1.getAttribute("locationData");
 
     setTimeout(function() {
         child1.classList.remove("animate-up", "animate-down");
@@ -107,11 +125,11 @@ function swap(num1, num2,) {
 }
 
 function bubbleSort() {
-    var count = 0;
-    for (var i = 0; i < itemCount; i++) {
-        for (var j = 0; j < itemCount - 1; j++) {
-            var id1 = parseInt(container.querySelector("[locationData='" + j + "']").id);
-            var id2 = parseInt(container.querySelector("[locationData='" + (j + 1) + "']").id);
+    let count = 0;
+    for (let i = 0; i < itemCount; i++) {
+        for (let j = 0; j < itemCount - 1; j++) {
+            let id1 = parseInt(container.querySelector("[locationData='" + j + "']").id);
+            let id2 = parseInt(container.querySelector("[locationData='" + (j + 1) + "']").id);
 
             if (id1 > id2) {
                 count++;
@@ -123,18 +141,19 @@ function bubbleSort() {
             }
         }
     }
+    console.log("bubble sort");
 }
 
 function selectionSort() {
-    console.log("selection sort")
+    console.log("selection sort");
 }
 
 function insertionSort() {
-    console.log("insertion sort")
+    console.log("insertion sort");
 }
 
 function quickSort() {
-    console.log("quick sort")
+    console.log("quick sort");
 }
 
 shuffleButton.addEventListener("click", shuffleBlocks);
@@ -144,5 +163,7 @@ selectionButton.addEventListener("click", selectionSort);
 insertionButton.addEventListener("click", insertionSort);
 quickButton.addEventListener("click", quickSort);
 swapButton.addEventListener("click", function() {
-    swap(0, 99);
+    swap(23, 71);
 });
+
+updateButton.addEventListener("click", updateBlockCount);
