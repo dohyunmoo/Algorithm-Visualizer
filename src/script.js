@@ -1,7 +1,6 @@
 const container = document.querySelector(".block-container");
 const shuffleButton = document.getElementById("shuffle-button");
 const resetButton = document.getElementById("reset-button");
-const swapButton = document.getElementById("swap-button");
 const bubbleButton = document.getElementById("bubble");
 const selectionButton = document.getElementById("selection");
 const insertionButton = document.getElementById("insertion");
@@ -233,10 +232,6 @@ quickButton.addEventListener("click", async () => {
         await quickSort();
         algorithmRunning = false;
     }
-});
-
-swapButton.addEventListener("click", function() {
-    swap(23, 71);
 });
 
 updateButton.addEventListener("click", updateBlockCount);
