@@ -40,7 +40,6 @@ h1 {
     align-items: flex-end;
     margin-top: 10px;
 }
-
 #block-count-input {
     width: 100px;
     height: 18px;
@@ -68,24 +67,18 @@ h1 {
 
 .animate-up {
     animation-name: move-up;
-    animation-duration: 0.5s;
-    animation-timing-function: ease-in-out;
+    /* animation-duration: 1s;
+    animation-timing-function: ease-in-out; */
     animation-iteration-count: 1;
-    transform: translateY(-1%);
+    transform: translateY(15px);
+    transition: transform 1s ease-in-out;
 }
   
-.fade-out {
-    animation-name: fade-out;
-    animation-duration: 0.2s; /* Adjust fade duration */
-    animation-timing-function: ease-in-out;
+.animate-down {
+    animation-name: move-down;
+    /* animation-duration: 1s;
+    animation-timing-function: ease-in-out; */
     animation-iteration-count: 1;
-    opacity: 0; /* Fade out */
-}
-  
-.fade-in {
-    animation-name: fade-in;
-    animation-duration: 0.2s; /* Adjust fade duration */
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: 1;
-    opacity: 1; /* Fade in */
+    transform: translateY(10vh);
+    transition: transform 1s ease-in-out;
 }

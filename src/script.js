@@ -6,11 +6,23 @@ const bubbleButton = document.getElementById("bubble");
 const selectionButton = document.getElementById("selection");
 const insertionButton = document.getElementById("insertion");
 const quickButton = document.getElementById("quick");
+const speedUpButton = document.getElementById("speed-up");
+const speedDownButton = document.getElementById("speed-down");
 
 const blockCountInput = document.getElementById("block-count-input");
 const updateButton = document.getElementById("update-block-count");
 
 var itemCount = 100;
+var speed = 800;
+
+function speedControl(isUp) {
+    if (isUp && speed > 25) {
+        speed = parseInt(speed / 2);
+    } else if (!isUp && speed < 1600) {
+        speed = parseInt(speed * 2);
+    }
+    console.log(speed);
+}
 
 // Function to create a single block
 function createBlock(num) {
@@ -34,6 +46,7 @@ function reset() {
     for (let i = 0; i < itemCount; i++) {
         container.appendChild(createBlock(i));
     }
+    speed = 1000;
 }
 
 function updateBlockCount() {
@@ -70,7 +83,7 @@ function shuffleBlocks() {
 }
 
 // swapping ID num1 and ID num2
-async function swap(num1, num2, callback) {
+async function swap(num1, num2) {
     let child1 = document.getElementById(num1);
     let child2 = document.getElementById(num2);
 
@@ -80,22 +93,24 @@ async function swap(num1, num2, callback) {
     let currLocation1 = child1.getAttribute("locationData");
     let currLocation2 = child2.getAttribute("locationData"); 
 
-    // // temp1
-    child1.classList.add("animate-up");
-    child2.classList.add("animate-up");
-
     container.insertBefore(placeholder2, child2);
     container.insertBefore(placeholder1, child1);
+
+    await new Promise(resolve => setTimeout(resolve, speed));
+    child1.classList.add("animate-up");
+    child2.classList.add("animate-up");
 
     container.removeChild(child1);
     container.removeChild(child2);
 
-    await new Promise(resolve => setTimeout(resolve, 10));
-    child1.classList.add("animate-down");
-    child2.classList.add("animate-down");
-
     container.insertBefore(child2, placeholder1);
     container.insertBefore(child1, placeholder2);
+
+    await new Promise(resolve => setTimeout(resolve, speed));
+    child1.classList.remove("animate-up");
+    child2.classList.remove("animate-up");
+    child1.classList.add("animate-down");
+    child2.classList.add("animate-down");
 
     container.removeChild(placeholder1)
     container.removeChild(placeholder2)
@@ -105,10 +120,9 @@ async function swap(num1, num2, callback) {
     // child2.textContent = child2.getAttribute("locationData");
     // child1.textContent = child1.getAttribute("locationData");
 
-    setTimeout(function() {
-        child1.classList.remove("animate-up", "animate-down");
-        child2.classList.remove("animate-up", "animate-down");
-    }, 40);
+    await new Promise(resolve => setTimeout(resolve, speed));
+    child1.classList.remove("animate-down");
+    child2.classList.remove("animate-down");
 
     return;
 }
@@ -131,15 +145,37 @@ async function bubbleSort() {
 }
 
 async function selectionSort() {
-    await console.log("selection sort");
+    let count = 0;
+
+    for (let i = 0; i < itemCount - 1; i++) {
+        let smallestIndex = parseInt(container.querySelector("[locationData='" + i + "']").id);
+        let minimumIndexId = parseInt(container.querySelector("[locationData='" + i + "']").id);
+
+        for (let j = i + 1; j < itemCount; j++) {
+            let id2 = parseInt(container.querySelector("[locationData='" + j + "']").id);
+
+            if (minimumIndexId > id2) {
+                minimumIndexId = id2;
+            }
+        }
+
+        if (smallestIndex != minimumIndexId) {
+            count++;
+            await swap(smallestIndex, minimumIndexId);
+            console.log("iteration count " + count + ": swapping " + smallestIndex + " and " + minimumIndexId + ".");
+        }
+    }
+    console.log("selection sort");
 }
 
 async function insertionSort() {
-    console.log("insertion sort");
+    let count = 0;
+
+    await console.log("insertion sort");
 }
 
 async function quickSort() {
-    console.log("quick sort");
+    await console.log("quick sort");
 }
 
 shuffleButton.addEventListener("click", shuffleBlocks);
@@ -169,4 +205,12 @@ blockCountInput.addEventListener("keydown", function(event) {
     if (event.key == "Enter") {
         updateBlockCount();
     }
+});
+
+speedUpButton.addEventListener("click", function() {
+    speedControl(true);
+});
+
+speedDownButton.addEventListener("click", function() {
+    speedControl(false);
 });
