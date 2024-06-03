@@ -70,7 +70,7 @@ h1 {
     /* animation-duration: 1s;
     animation-timing-function: ease-in-out; */
     animation-iteration-count: 1;
-    transform: translateY(15px);
+    transform: translateY(5vh);
     transition: transform 1s ease-in-out;
 }
   

@@ -11,9 +11,13 @@ const speedDownButton = document.getElementById("speed-down");
 
 const blockCountInput = document.getElementById("block-count-input");
 const updateButton = document.getElementById("update-block-count");
+const speedLabel = document.getElementById("speed-label");
 
 var itemCount = 100;
-var speed = 800;
+const defaultSpeed = 800;
+var speed = defaultSpeed;
+
+var algorithmRunning = false;
 
 function speedControl(isUp) {
     if (isUp && speed > 25) {
@@ -21,7 +25,7 @@ function speedControl(isUp) {
     } else if (!isUp && speed < 1600) {
         speed = parseInt(speed * 2);
     }
-    console.log(speed);
+    speedLabel.textContent = "Speed: " + defaultSpeed/speed + "x";
 }
 
 // Function to create a single block
@@ -42,43 +46,49 @@ for (let i = 0; i < itemCount; i++) {
 }
 
 function reset() {
-    container.innerHTML = "";
-    for (let i = 0; i < itemCount; i++) {
-        container.appendChild(createBlock(i));
+    if (!algorithmRunning) {
+        container.innerHTML = "";
+        for (let i = 0; i < itemCount; i++) {
+            container.appendChild(createBlock(i));
+        }
+        speed = defaultSpeed;
     }
-    speed = 1000;
 }
 
 function updateBlockCount() {
-    if (isNaN(blockCountInput.value)) {
-        console.error("Invalid type of input");
-    } else {
-        var input_int = parseInt(blockCountInput.value);
-        console.log(input_int)
-    
-        if (input_int < 10 || input_int > 300) {
-            console.error(input_int + " out of scope");
+    if (!algorithmRunning) {
+        if (isNaN(blockCountInput.value)) {
+            console.error("Invalid type of input");
         } else {
-            itemCount = input_int;
-            reset();
+            var input_int = parseInt(blockCountInput.value);
+            console.log(input_int)
+        
+            if (input_int < 10 || input_int > 300) {
+                console.error(input_int + " out of scope");
+            } else {
+                itemCount = input_int;
+                reset();
+            }
         }
     }
 }
 
 // Function to shuffle the order of blocks
 function shuffleBlocks() {
-    const blocks = Array.from(container.querySelectorAll(".block"));
-    for (let i = blocks.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [blocks[i], blocks[j]] = [blocks[j], blocks[i]];
-    }
-    container.innerHTML = ''; // Clear existing blocks
-    blocks.forEach(block => container.appendChild(block));
-
-    let divs = container.querySelectorAll("div");
-    for (let i = 0; i < divs.length; i++) {
-        divs[i].setAttribute("locationData", i);
-        // divs[i].textContent = divs[i].getAttribute("locationData");
+    if (!algorithmRunning) {
+        const blocks = Array.from(container.querySelectorAll(".block"));
+        for (let i = blocks.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [blocks[i], blocks[j]] = [blocks[j], blocks[i]];
+        }
+        container.innerHTML = ''; // Clear existing blocks
+        blocks.forEach(block => container.appendChild(block));
+    
+        let divs = container.querySelectorAll("div");
+        for (let i = 0; i < divs.length; i++) {
+            divs[i].setAttribute("locationData", i);
+            // divs[i].textContent = divs[i].getAttribute("locationData");
+        }
     }
 }
 
@@ -171,29 +181,58 @@ async function selectionSort() {
 async function insertionSort() {
     let count = 0;
 
-    await console.log("insertion sort");
+    for (let i = 1; i < itemCount; i++) {
+        let key = parseInt(container.querySelector("[locationData='" + i + "']").id);
+        j = i - 1;
+        while (j >= 0 && key < parseInt(container.querySelector("[locationData='" + j + "']").id)) {
+            count++;
+            await swap(key, parseInt(container.querySelector("[locationData='" + j + "']").id));
+            j--;
+        }
+
+    }
+    console.log("insertion sort");
 }
 
 async function quickSort() {
+    let count = 0;
+
+
     await console.log("quick sort");
 }
 
 shuffleButton.addEventListener("click", shuffleBlocks);
 resetButton.addEventListener("click", reset);
 bubbleButton.addEventListener("click", async () => {
-    await bubbleSort();
+    if (!algorithmRunning) {
+        algorithmRunning = true;
+        await bubbleSort();
+        algorithmRunning = false;
+    }
 });
 
 selectionButton.addEventListener("click", async () => {
-    await selectionSort();
+    if (!algorithmRunning) {
+        algorithmRunning = true;
+        await selectionSort();
+        algorithmRunning = false;
+    }
 });
 
 insertionButton.addEventListener("click", async () => {
-    await insertionSort();
+    if (!algorithmRunning) {
+        algorithmRunning = true;
+        await insertionSort();
+        algorithmRunning = false;
+    }
 });
 
 quickButton.addEventListener("click", async () => {
-    await quickSort();
+    if (!algorithmRunning) {
+        algorithmRunning = true;
+        await quickSort();
+        algorithmRunning = false;
+    }
 });
 
 swapButton.addEventListener("click", function() {
