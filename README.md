@@ -1,9 +1,9 @@
 # Algorithm-Visualizer
 Visualization of algorithms using colors
 
-- [ ] Bubble Sort
-- [ ] Selection Sort
-- [ ] Insertion Sort
+- [x] Bubble Sort
+- [x] Selection Sort
+- [x] Insertion Sort
 - [ ] Quick Sort
 
 # How to run
