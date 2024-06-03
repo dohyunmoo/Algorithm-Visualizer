@@ -46,13 +46,13 @@ for (let i = 0; i < itemCount; i++) {
 }
 
 function reset() {
-    if (!algorithmRunning) {
-        container.innerHTML = "";
-        for (let i = 0; i < itemCount; i++) {
-            container.appendChild(createBlock(i));
-        }
-        speed = defaultSpeed;
+    container.innerHTML = "";
+    for (let i = 0; i < itemCount; i++) {
+        container.appendChild(createBlock(i));
     }
+    speed = defaultSpeed;
+    speedLabel.textContent = "Speed: 1x";
+    algorithmRunning = false;
 }
 
 function updateBlockCount() {
