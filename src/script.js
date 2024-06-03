@@ -70,7 +70,7 @@ function shuffleBlocks() {
 }
 
 // swapping ID num1 and ID num2
-function swap(num1, num2,) {
+async function swap(num1, num2, callback) {
     let child1 = document.getElementById(num1);
     let child2 = document.getElementById(num2);
 
@@ -80,7 +80,7 @@ function swap(num1, num2,) {
     let currLocation1 = child1.getAttribute("locationData");
     let currLocation2 = child2.getAttribute("locationData"); 
 
-    // temp1
+    // // temp1
     child1.classList.add("animate-up");
     child2.classList.add("animate-up");
 
@@ -90,23 +90,9 @@ function swap(num1, num2,) {
     container.removeChild(child1);
     container.removeChild(child2);
 
-    // temp2
-    child1.classList.add("fade-out");
-    child2.classList.add("fade-out");
-
-    setTimeout(function() {
-        child1.classList.remove("fade-out");
-        child1.classList.add("fade-in");
-        child2.classList.remove("fade-out");
-        child2.classList.add("fade-in");
-    }, 100);
-
-    setTimeout(function() {
-        child1.classList.remove("fade-in");
-        child2.classList.remove("fade-in");
-        child1.classList.add("animate-down");
-        child2.classList.add("animate-down");
-    }, 200);
+    await new Promise(resolve => setTimeout(resolve, 10));
+    child1.classList.add("animate-down");
+    child2.classList.add("animate-down");
 
     container.insertBefore(child2, placeholder1);
     container.insertBefore(child1, placeholder2);
@@ -122,10 +108,12 @@ function swap(num1, num2,) {
     setTimeout(function() {
         child1.classList.remove("animate-up", "animate-down");
         child2.classList.remove("animate-up", "animate-down");
-    }, 300);
+    }, 40);
+
+    return;
 }
 
-function bubbleSort() {
+async function bubbleSort() {
     let count = 0;
     for (let i = 0; i < itemCount; i++) {
         for (let j = 0; j < itemCount - 1; j++) {
@@ -134,10 +122,7 @@ function bubbleSort() {
 
             if (id1 > id2) {
                 count++;
-                // setTimeout(function() {
-                //     swap(id1, id2);
-                // }, 300 * count);
-                swap(id1, id2)
+                await swap(id1, id2);
                 console.log("iteration count " + count + ": swapping " + id1 + " and " + id2 + ".");
             }
         }
@@ -145,24 +130,36 @@ function bubbleSort() {
     console.log("bubble sort");
 }
 
-function selectionSort() {
-    console.log("selection sort");
+async function selectionSort() {
+    await console.log("selection sort");
 }
 
-function insertionSort() {
+async function insertionSort() {
     console.log("insertion sort");
 }
 
-function quickSort() {
+async function quickSort() {
     console.log("quick sort");
 }
 
 shuffleButton.addEventListener("click", shuffleBlocks);
 resetButton.addEventListener("click", reset);
-bubbleButton.addEventListener("click", bubbleSort);
-selectionButton.addEventListener("click", selectionSort);
-insertionButton.addEventListener("click", insertionSort);
-quickButton.addEventListener("click", quickSort);
+bubbleButton.addEventListener("click", async () => {
+    await bubbleSort();
+});
+
+selectionButton.addEventListener("click", async () => {
+    await selectionSort();
+});
+
+insertionButton.addEventListener("click", async () => {
+    await insertionSort();
+});
+
+quickButton.addEventListener("click", async () => {
+    await quickSort();
+});
+
 swapButton.addEventListener("click", function() {
     swap(23, 71);
 });
