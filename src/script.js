@@ -49,8 +49,6 @@ function reset() {
     for (let i = 0; i < itemCount; i++) {
         container.appendChild(createBlock(i));
     }
-    speed = defaultSpeed;
-    speedLabel.textContent = "Speed: 1x";
     algorithmRunning = false;
 }
 
