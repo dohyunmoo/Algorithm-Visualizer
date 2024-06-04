@@ -4,7 +4,7 @@ Visualization of algorithms using colors
 - [x] Bubble Sort
 - [x] Selection Sort
 - [x] Insertion Sort
-- [ ] Quick Sort
+- [x] Quick Sort
 
 # How to run
 

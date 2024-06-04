@@ -93,6 +93,10 @@ function shuffleBlocks() {
 
 // swapping ID num1 and ID num2
 async function swap(num1, num2) {
+    if (num1 == num2) {
+        return;
+    }
+    
     let child1 = document.getElementById(num1);
     let child2 = document.getElementById(num2);
 
@@ -150,7 +154,6 @@ async function bubbleSort() {
             }
         }
     }
-    console.log("bubble sort");
 }
 
 async function selectionSort() {
@@ -174,7 +177,6 @@ async function selectionSort() {
             console.log("iteration count " + count + ": swapping " + smallestIndex + " and " + minimumIndexId + ".");
         }
     }
-    console.log("selection sort");
 }
 
 async function insertionSort() {
@@ -188,16 +190,35 @@ async function insertionSort() {
             await swap(key, parseInt(container.querySelector("[locationData='" + j + "']").id));
             j--;
         }
-
     }
-    console.log("insertion sort");
 }
 
-async function quickSort() {
-    let count = 0;
+async function quickSort(start_q, end_q) {
 
+    async function divide(start, end) {
+        let pivot = parseInt(container.querySelector("[locationData='" + end + "']").id);
+        let i = start - 1;
 
-    await console.log("quick sort");
+        for (let j = start; j < end; j++) {
+            let tempId = parseInt(container.querySelector("[locationData='" + j + "']").id);
+            if (tempId <= pivot) {
+                i++;
+                await swap(parseInt(container.querySelector("[locationData='" + i + "']").id), tempId);
+            }
+        }
+
+        let gElement = parseInt(container.querySelector("[locationData='" + (i + 1) + "']").id);
+        await swap(gElement, pivot);
+
+        return i + 1;
+    }
+
+    if (start_q < end_q) {
+        let iq = await divide(start_q, end_q);
+
+        await quickSort(start_q, iq - 1);
+        await quickSort(iq + 1, end_q);
+    }
 }
 
 shuffleButton.addEventListener("click", shuffleBlocks);
@@ -208,6 +229,7 @@ bubbleButton.addEventListener("click", async () => {
         await bubbleSort();
         algorithmRunning = false;
     }
+    console.log("bubble sort");
 });
 
 selectionButton.addEventListener("click", async () => {
@@ -216,6 +238,7 @@ selectionButton.addEventListener("click", async () => {
         await selectionSort();
         algorithmRunning = false;
     }
+    console.log("selection sort");
 });
 
 insertionButton.addEventListener("click", async () => {
@@ -224,14 +247,16 @@ insertionButton.addEventListener("click", async () => {
         await insertionSort();
         algorithmRunning = false;
     }
+    console.log("insertion sort");
 });
 
 quickButton.addEventListener("click", async () => {
     if (!algorithmRunning) {
         algorithmRunning = true;
-        await quickSort();
+        await quickSort(0, itemCount - 1);
         algorithmRunning = false;
     }
+    console.log("quick sort");
 });
 
 updateButton.addEventListener("click", updateBlockCount);
