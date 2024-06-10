@@ -5,6 +5,9 @@ Visualization of algorithms using colors
 - [x] Selection Sort
 - [x] Insertion Sort
 - [x] Quick Sort
+- [ ] GUI Improvement
+- [ ] Dark Mode / Light Mode
+- [ ] Reverse Sorting
 
 # How to run
 
